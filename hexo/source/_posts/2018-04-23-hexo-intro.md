@@ -55,6 +55,8 @@ waterlu.github.io
 
 项目创建成功后访问 https://waterlu.github.io/ ，后面就是部署页面的操作了。
 
+
+
 ## Hexo基本操作
 
 Hexo是静态化的博客框架，使用markdown格式编写文章，然后通过hexo generate指令生成静态的HTML页面，最后通过hexo depoly指令将HTML页面上传到GitHub上。
@@ -113,5 +115,104 @@ $ hexo server
 ```shell
 $ npm install hexo-deployer-git --save
 $ hexo deploy
+```
+
+
+
+## 个性化
+
+### 定制主题
+
+我使用的主题是Maupassant，感觉比较简洁。
+
+>  注意：npm install的两个模块不是全局安装的，每次hexo init创建新项目后都得执行(npm install -g才是全局安装)。
+
+```shell
+$ git clone https://github.com/tufu9441/maupassant-hexo.git themes/maupassant
+$ npm install hexo-renderer-pug --save
+$ npm install hexo-renderer-sass --save
+```
+
+修改根目录下的_config.yml，设置theme为maupassant
+
+```yaml
+theme: maupassant
+```
+
+创建about页面
+
+```shell
+$ hexo new page about
+```
+
+修改themes/maupassant目录下的_config.yml，去掉RSS页面
+
+```yaml
+menu:
+  - page: home
+    directory: .
+    icon: fa-home
+  - page: archive
+    directory: archives/
+    icon: fa-archive
+  - page: about
+    directory: about/
+    icon: fa-user
+  # - page: rss
+  #   directory: atom.xml
+  #   icon: fa-rss
+```
+
+### 评论功能
+
+> TODO
+>
+
+
+
+## Hexo日常操作
+
+### 写文章
+
+- [layout]默认为post，指的是文章的布局类型，在_config.yml中可以配置
+- 如果[layout]=post，那么新文章将生成到source/_posts目录下
+
+```shell
+$ hexo new [layout] <title>
+```
+
+- 文章开头"---"之间的部分称为Front-matter，主要包括以下信息
+
+| 参数         | 描述     |
+| ---------- | ------ |
+| layout     | 文章布局   |
+| title      | 文章标题   |
+| date       | 文章发布时间 |
+| updated    | 文章更新时间 |
+| tags       | 标签     |
+| categories | 分类     |
+
+### 发表文章
+
+```shell
+$ hexo new post [title]
+$ hexo clean
+$ hexo generate
+$ hexo server
+$ hexo deploy
+```
+
+### 常见问题
+
+#### 解析错误
+
+- 当title.md文章中出现无法解析的markdown语法时，报错Template render error
+- 因为需要把markdown转成html，所以必须解析正确
+
+```shell
+$ hexo g
+INFO  Start processing
+FATAL Something's wrong. Maybe you can find the solution here: http://hexo.io/docs/troubleshooting.html
+Template render error: expected variable end
 ```
 
