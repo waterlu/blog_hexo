@@ -129,7 +129,7 @@ $ hexo deploy
 我使用的主题是Maupassant，感觉比较简洁。
 
 >  注意：npm install的两个模块不是全局安装的，每次hexo init创建新项目后都得执行(npm install -g才是全局安装)。
->  
+>
 
 ```shell
 $ git clone https://github.com/tufu9441/maupassant-hexo.git themes/maupassant
