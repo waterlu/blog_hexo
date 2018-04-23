@@ -37,6 +37,7 @@ v8.11.1
 node.js中带了包管理工具npm，后面的模块都可以通过npm来安装，-g表示全局安装
 
 > 官网上的文档中只安装了hexo-cli，试了一下有问题，这里还是安装hexo(里面包含hexo-cli)
+>
 
 ```shell
 $ npm install -g hexo
@@ -63,6 +64,7 @@ waterlu.github.io
 Hexo是静态化的博客框架，使用markdown格式编写文章，然后通过hexo generate指令生成静态的HTML页面，最后通过hexo depoly指令将HTML页面上传到GitHub上。
 
 > 所有hexo操作都需要在hexo init的目录执行，也就是含有_config.yml和source的目录，在其他目录执行hexo generate等操作是无效的。
+>
 
 ### 初始化
 
@@ -127,6 +129,7 @@ $ hexo deploy
 我使用的主题是Maupassant，感觉比较简洁。
 
 >  注意：npm install的两个模块不是全局安装的，每次hexo init创建新项目后都得执行(npm install -g才是全局安装)。
+>  
 
 ```shell
 $ git clone https://github.com/tufu9441/maupassant-hexo.git themes/maupassant
@@ -205,7 +208,7 @@ $ hexo deploy
 
 ### 常见问题
 
-#### 解析错误
+#### *解析错误*
 
 - 当title.md文章中出现无法解析的markdown语法时，报错Template render error
 - 因为需要把markdown转成html，所以必须解析正确
