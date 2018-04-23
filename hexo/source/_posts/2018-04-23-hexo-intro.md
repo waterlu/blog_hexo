@@ -2,6 +2,7 @@
 title: 使用Hexo搭建自己的博客
 date: 2018-04-21
 categories: 工具
+tags: [hexo, github]
 toc: true
 description: 搭建个性化的博客网站，我们需要用到hexo和github。其中Hexo是一个快速、简洁且高效的博客框架，使用hexo我们可以快速编写、生成、预览和部署博客文章。最终我们的博客文章发布到github上。Github为个人博客提供了免费的发布平台，通过域名yourname.github.io可以访问到同名的github项目。
 mathjax2: true
