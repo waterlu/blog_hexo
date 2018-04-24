@@ -171,8 +171,43 @@ menu:
 
 > TODO
 >
+> 
 
+### 站内搜索
 
+- 安装hexo-generator-search
+
+```shell
+$ npm install hexo-generator-search --save
+$ npm install hexo-generator-searchdb --save
+```
+
+- 修改根目录下的_config.yml，增加如下配置
+
+```properties
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+```
+
+- 修改themes\maupassant下的_config.yml，打开self_search
+
+```properties
+google_search: false ## Use Google search, true/false.
+baidu_search: false ## Use Baidu search, true/false.
+swiftype: ## Your swiftype_key, e.g. m7b11ZrsT8Me7gzApciT
+tinysou: ## Your tinysou_key, e.g. 4ac092ad8d749fdc6293
+self_search: true ## Use a jQuery-based local search engine, true/false.
+```
+
+### 访问统计
+
+- 修改themes\maupassant下的_config.yml，打开不蒜子
+```properties
+busuanzi: true ## If you want to use Busuanzi page views please set the value to true.
+```
 
 ## Hexo日常操作
 

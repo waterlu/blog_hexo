@@ -4,7 +4,7 @@
 
 # Site
 title: Waterlu's Blog
-subtitle: 枯藤老树昏鸦，小桥流水人家，古道西风瘦马。
+subtitle: 小桥流水人家
 description: 个人技术博客
 keywords:
 author: Water Lu
@@ -83,3 +83,9 @@ deploy:
   branch: master
 
 mathjax2: true
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
