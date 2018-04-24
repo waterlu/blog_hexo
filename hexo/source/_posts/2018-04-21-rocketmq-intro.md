@@ -1,6 +1,6 @@
 ---
 title: RocketMQ(1) 概述
-date: 2018-04-21
+date: 2018-04-21 14:00:00
 categories: 消息队列
 tags: [mq, rocketmq]
 toc: true

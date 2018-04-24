@@ -1,6 +1,6 @@
 ---
 title: 使用Hexo搭建自己的博客
-date: 2018-04-21
+date: 2018-04-21 10:00:00
 categories: 工具
 tags: [hexo, github]
 toc: true
