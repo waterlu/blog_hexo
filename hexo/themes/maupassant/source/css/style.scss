@@ -860,10 +860,10 @@ pre {
 /* syntax highlight*/
 figure.highlight,
 .codeblock {
-    background:     #f8f8f8;
+    background:     #F8F8F8;
     margin:         10px 0;
     line-height:    1.1em;
-    color:          #000333;
+    color:          #000000;
     padding-top:    15px;
     overflow:       hidden;
     border-style:   solid;
@@ -950,10 +950,10 @@ figure.highlight,
 .highlight {
     // General
     .comment {
-        color: #969896;
-    }
+             color: #969896;
+         }
     .string {
-        color: #183691;
+        color: #55a532;
     }
     .keyword {
         color: #a71d5d;
@@ -1122,21 +1122,21 @@ figure.highlight,
     // JAVA
     &.java .code {
         .title {
-            color: #795da3;
+            color: #0000FF;
         }
         .javadoc {
-            color: #969896;
+            color: #A0522D;
         }
         .meta,
         .annotation,
         .javadoctag {
-            color: #a71d5d;
+            color: #A0522D;
         }
         .number {
-            color: #0086b3;
+            color: #55a532;
         }
         .params {
-            color: #1d3e81;
+            color: #000000;
         }
     }
     // JavaScript

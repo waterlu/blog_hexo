@@ -66,8 +66,8 @@ public class ProcessThread {
 线程是可以设置优先级的，常见的优先级有以下三种，默认为NORMAL_PRIORITY ：
 
 -	MAX_PRIORITY = 10
--	NORMAL_PRIORITY = 5
--	MIN_PRIORITY = 1
+  -NORMAL_PRIORITY = 5
+  -MIN_PRIORITY = 1
 
 理论上优先级高的线程先被执行，具体情况也要看操作系统如何调度。
 
@@ -168,11 +168,11 @@ public class ProducerAndConsumer {
 
 ```java
 public class Producer extends Thread {
-	// 库存最大容量
+    // 库存最大容量
     private final static int MAX = 10;
-	// 计数器，方便观察
+    // 计数器，方便观察
     private AtomicInteger count = new AtomicInteger(1);
-	// 库存
+    // 库存
     private LinkedList<String> storeList;
 
     public Producer(LinkedList<String> storeList) {
@@ -183,9 +183,9 @@ public class Producer extends Thread {
     public void run() {
       	// 获得时间片，进入running状态
         while(true) {
-          	// 必须在synchronized代码块内使用wait()和notify()
-          	// 如果storeList已经被其他线程锁定，进入blocked状态
-          	// 如果storeList没有被其他线程锁定，继续running状态
+            // 必须在synchronized代码块内使用wait()和notify()
+            // 如果storeList已经被其他线程锁定，进入blocked状态
+            // 如果storeList没有被其他线程锁定，继续running状态
             synchronized (storeList) {
                 while(storeList.size() == MAX) {
                     System.out.println("库存满了");
@@ -224,7 +224,7 @@ public class Producer extends Thread {
 
 ```java
 public class Consumer extends Thread {
-	// 库存
+    // 库存
     private LinkedList<String> storeList;
 
     public Consumer(LinkedList<String> storeList) {
@@ -235,8 +235,8 @@ public class Consumer extends Thread {
     public void run() {
       	// 获得时间片，进入running状态
         while(true) {
-          	// 如果storeList已经被其他线程锁定，进入blocked状态
-          	// 如果storeList没有被其他线程锁定，继续running状态          
+            // 如果storeList已经被其他线程锁定，进入blocked状态
+            // 如果storeList没有被其他线程锁定，继续running状态          
             synchronized (storeList) {
                 while(storeList.size() == 0) {
                     System.out.println("库存空了");
@@ -254,13 +254,13 @@ public class Consumer extends Thread {
                 String data = storeList.get(0);
                 System.out.println("消费 " + data);
                 storeList.remove(0);
-			   // 让出时间片，进入waiting状态
+                // 让出时间片，进入waiting状态
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-			   // 通知生产者，如果生产者由于库存满了进入waiting状态，此时将被唤醒
+                // 通知生产者，如果生产者由于库存满了进入waiting状态，此时将被唤醒
                 storeList.notifyAll();
               	// 此后重新尝试进入synchronized代码块
             }
