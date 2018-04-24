@@ -1,11 +1,10 @@
 ---
 title: 关于
 date: 2018-04-23 09:47:47
+comments: false
 ---
 
-
-
-一个已逾不惑之年的程序员的独白，Waterlu取自Waterloo的谐音。
+Waterlu取自Waterloo的谐音。
 
 
 
