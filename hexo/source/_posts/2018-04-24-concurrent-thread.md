@@ -24,7 +24,7 @@ comments: false
 
 *什么是线程?*
 
-线程理解起来比进程要抽象一些。线程与操作系统的任务调用相关，可以简单认为线程是操作系统任务调用的最小单位。现在的大部分操作系统采用的都是时间片和抢占式的任务调用机制，当多个任务共享CPU资源时，一个任务执行一段时间后被挂起(这个任务执行的这段时间就称为时间片)，切换到另外一个任务开始执行。通常任务调度的单位不是进程，而是线程，也就是说，线程是进程可以独立交给CPU执行的一个任务。
+线程理解起来比进程要抽象一些。线程与操作系统的任务调用相关，可以简单认为线程是操作系统任务调度的基本单位。现在的大部分操作系统采用的都是时间片和抢占式的任务调用机制，当多个任务共享CPU资源时，一个任务执行一段时间后被挂起(这个任务执行的这段时间就称为时间片)，切换到另外一个任务开始执行。通常任务调度的单位不是进程，而是线程，也就是说，线程是进程可以独立交给CPU执行的一个任务。线程有自己的栈和程序计数器。
 
 这样，一个进程可以包含多个线程，每个线程作为一个任务交给操作系统调用。实际上，Java进程至少要包含一个线程，如果我们没有显示的创建线程，main()方法是在[main]线程中执行的。对于Java进程来说，每个线程有自己的栈空间，多个线程共享进程的堆空间。
 
@@ -126,6 +126,40 @@ public class ProcessThread {
 > 注意：区分Thread类和Object类的方法，区分静态方法和普通方法。
 >
 > 
+
+Thread类和Object类相关方法
+
+```java
+package java.lang;
+public class Thread implements Runnable {
+	public static native Thread currentThread();
+  	public static native void yield();
+  	public static native void sleep(long millis) throws InterruptedException;  
+  	public synchronized void start() {
+    	start0();  
+    }
+  	public void interrupt() {
+      	interrupt0();
+    }
+  	public final void setPriority(int newPriority) {
+      	setPriority0(priority = newPriority);
+    }
+  	private native void start0();
+  	private native void interrupt0();
+  	private native void setPriority0(int newPriority);
+}
+```
+
+```java
+package java.lang;
+public class Object {
+	public final native void notify();
+  	public final native void notifyAll();
+  	public final native void wait(long timeout) throws InterruptedException;
+}
+```
+
+
 
 ### 生产者和消费者实例
 

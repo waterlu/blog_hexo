@@ -209,6 +209,38 @@ self_search: true ## Use a jQuery-based local search engine, true/false.
 busuanzi: true ## If you want to use Busuanzi page views please set the value to true.
 ```
 
+### 流程图和序列图
+
+Hexo默认不支持markdown的flow图和sequence图，需要安装插件
+
+- 进入项目根目录安装插件
+
+```shell
+$ npm install --save hexo-filter-flowchart
+$ npm install --save hexo-filter-sequence
+```
+
+- 修改项目的_config.yml，增加配置
+
+```properties
+flowchart:
+  # raphael:   # optional, the source url of raphael.js
+  # flowchart: # optional, the source url of flowchart.js
+  options: # options used for `drawSVG`
+
+sequence:
+  # webfont:     # optional, the source url of webfontloader.js
+  # snap:        # optional, the source url of snap.svg.js
+  # underscore:  # optional, the source url of underscore.js
+  # sequence:    # optional, the source url of sequence-diagram.js
+  # css: # optional, the url for css, such as hand drawn theme
+  options:
+    theme:
+    css_class:   
+```
+
+
+
 ## Hexo日常操作
 
 ### 写文章
