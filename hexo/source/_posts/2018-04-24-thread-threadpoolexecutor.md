@@ -1,5 +1,5 @@
 ---
-title: 多线程(3) ThreadPoolExecutor
+title: 多线程基础篇(3) ThreadPoolExecutor
 date: 2018-04-24 16:37:24
 updated: 2018-04-25
 categories: 并发编程
