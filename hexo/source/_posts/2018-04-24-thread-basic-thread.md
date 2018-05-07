@@ -4,7 +4,7 @@ date: 2018-04-24 09:47:39
 categories: 并发编程
 tags: [并发, 线程]
 toc: true
-description: 本文介绍并发中最基本的概念-线程，包括我对进程和线程的理解，以及如何创建并运行一个新的线程。
+description: 本文介绍并发中最基本的概念-线程，包括如何创建、启动和终止一个线程，以及对线程一些基本属性的解释。
 comments: false
 ---
 
@@ -30,6 +30,8 @@ comments: false
 ### 创建线程
 
 通常有三种创建线程的方法：继承Thread类，实现Runnable接口和实现Callable接口。继承Thread类和实现Runnable接口都需要实现run()方法，实现Callable接口需要实现call()方法。以下为示例代码。
+
+> 可以认为run()方法和main()方法类似，都是程序的入口。main()是Java进程主线程的程序入口，run()是一个新线程的程序入口。
 
 **Thread类**
 
@@ -306,9 +308,47 @@ public class ThreadStop {
 14:11:44:580 INFO [Thread-1] interrupted
 ```
 
+## 线程属性
+
+### 线程名
+
+通过线程名可以区分每一个线程，输出线程名到日志中对于分析多线程问题是非常有帮助的。
+
+设置线程名称
+
+```java
+thread.setName("threadName");
+```
+
+读取当前线程的线程名称，注意使用Thread.currentThread()获取当前线程对象的方法
+
+```java
+Thread.currentThread().getName();
+```
+
+> 当然，如果线程实现的方式是从Thread类继承，那么当然可以调用this.getName()方法获取到线程名；但是，更多的场景是实现了Runnable或者Callable接口，这个时候this指向的就不是Thread对象了，所以使用Thread.currentThread().getName();获取线程名是更通用的方法。
+
+扩展一下，通过Thread的类的静态方法可以得到当前所有active的线程，有兴趣可以执行一下下面的代码看看输出结果
+
+```java
+public class ThreadBasic {
+  public static void main(String[] args) {
+    int threadCount = Thread.activeCount();
+    Thread [] threadList = new Thread[threadCount];
+    // 枚举所有活动的线程
+    int n = Thread.enumerate(threadList);
+    for (int i=0; i<n; i++) {
+      System.out.println(threadList[i].getName());
+    }
+  }
+}
+```
+
+按照我们的理解，输出的应该是"main"，因为这时候只有一个主线程。通过命令行运行，或者在IDEA中debug确实是预期的结果。但是如果在IDEA中run的话，会多一个"Monitor Ctrl-Break"线程。
+
 ### 线程优先级
 
-创建一个线程以后，可以设置线程的优先级。线程优先级是从1到10的数字，数字越大优先级越高，常用的优先级有MIN_PRIORITY、MAX_PRIORITY和NORMAL_PRIORITY三种，其中默认值为NORMAL_PRIORITY ：
+创建一个线程以后，可以设置线程的优先级。线程优先级是从1到10的数字，数字越大优先级越高，常用的优先级有MIN_PRIORITY、MAX_PRIORITY和NORMAL_PRIORITY三种，其中默认值为NORMAL_PRIORITY 
 
 ```java
 public final static int MIN_PRIORITY = 1;
@@ -326,7 +366,41 @@ thread.start();
 
 理论上优先级高的线程先被执行，但不一定绝对这样，具体情况要看操作系统如何调度。总体上，优先级高的线程有更多的机会被执行。
 
+### 守护线程
 
+通过设置daemon属性可以将一个线程设置为守护线程，默认值为false，也就是非守护线程，通常称为用户线程。
 
+```java
+thread.setDaemon(true);
+```
 
+守护线程和用户线程的差别不大，主要区别在于主线程结束时：如果主线程结束时，已经没有活动的用户线程，那么守护线程自动退出。平时我们很少会用到守护线程，GC线程是典型的守护线程，当其他线程都已经退出了，只保留一个GC线程也没有什么意义了。
+
+```java
+public class ThreadDaemon {
+  public static void main(String[] args) {
+    DaemonThread daemonThread = new DaemonThread();
+    daemonThread.start();
+  }
+  public static class DaemonThread extends Thread {
+    public DaemonThread() {
+      this.setName("DaemonThread");
+      this.setDaemon(true);
+    }
+    @Override
+    public void run() {
+      while (true) {
+        System.out.println(this.getName() + " - I'm alive.");
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+}
+```
+
+在上面的例子中，如果setDaemon(false)，当主线程结束退出后子线程会一直运行，输出“I'm alive.”；如果setDaemon(true)，当主线程结束退出后由于已经没有其他用户线程，子线程自动退出了。运行一下，你会发现甚至连一个“I'm alive.”都没有输出出来，这是因为调用完daemonThread.start()主线程就退出了，这个时候daemonThread还没有抢到时间片，等daemonThread抢到时间片的时候发现已经没有非守护线程了，就直接退出了。
 

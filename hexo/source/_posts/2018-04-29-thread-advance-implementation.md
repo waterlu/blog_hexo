@@ -1,7 +1,11 @@
 ---
-title: thread-implementation
-date: 2018-04-28 11:34:52
-tags:
+title: 多线程高级篇(2) 线程实现
+date: 2018-04-29 11:34:52
+categories: 并发编程
+tags: [并发, 多线程]
+toc: true
+description: 本文探究Java线程的底层实现，包括windows平台和Linux平台下的线程理论、原理和基本实现。
+comments: false
 ---
 
 ## 线程实现
