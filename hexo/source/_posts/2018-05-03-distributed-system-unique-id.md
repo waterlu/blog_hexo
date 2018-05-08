@@ -1,7 +1,11 @@
 ---
-title: 分布式ID生成
+title: 分布式ID生成器
 date: 2018-05-03 16:14:09
-tags:
+categories: 分布式
+tags: [分布式, SnowFlake]
+toc: false
+description: 在分布式情况下，尤其是分库分表情况下，如何生成表的主键是一个问题。自增主键？UUID？本文将介绍Twitter的SnowFlake算法。
+comments: false
 ---
 
 ## 分布式ID
@@ -19,7 +23,9 @@ tags:
 
 还有一种比较简单的办法就是直接使用UUID。UUID可以保证唯一性，并且不依赖于库。但是，UUID的问题是随机，没有顺序性，并且占用的存储空间比较大。
 
-UUID的好处：应用本地生成，保证唯一，数据库无感知。
+UUID的好处：
+
+- 应用本地生成，保证唯一，数据库无感知。
 
 UUID的坏处：
 
@@ -43,13 +49,13 @@ SnowFlake的优势是本地生成，不依赖于其他任何第三方。我的�
 
 根据实际情况，我们也可以在上述三部分的基础上增加新的内容，例如业务类型。为保证ID具有顺序特性，通常时间戳都是放在最前面的；为了做分布式hash，通常自增序号都是放在最后面的；所以业务类型字段可以放在中间，进程标志的前后都可以。
 
+回想一下，我们的order_bill_code其实也是类似的思路，业务类型+时间戳+自增序号(随机序号)，殊途同归。
+
+### 参考
+
+[Twitter-Snowflake，64位自增ID算法详解](https://www.jianshu.com/p/54a87a7c3622)
+
+[详解Twitter开源分布式自增ID算法snowflake](https://blog.csdn.net/jackpk/article/details/78248351)
 
 
-
-
-
-
-https://www.jianshu.com/p/54a87a7c3622
-
-https://blog.csdn.net/jackpk/article/details/78248351
 

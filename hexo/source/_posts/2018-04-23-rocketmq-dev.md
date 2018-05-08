@@ -5,7 +5,7 @@ updated: 2018-04-24
 categories: 消息队列
 tags: [mq, rocketmq]
 toc: true
-description: 本文首先展示最基本的生产者和消费者的用法，接下来详细描述事务消息的发送和回查的写法，最后是和spring boot的集成。
+description: 了解RocketMQ的基本知识以后，我们来看一看如何编写发送消息和收取消息的代码。先展示如何直接调用rocketmq-client模块实现，再展示如何使用spring boot starter来实现。
 comments: false
 ---
 
@@ -156,6 +156,5 @@ public class TestRocketMq {
 		consumer.start();
 	}
 }
-
 ```
 

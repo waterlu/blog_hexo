@@ -4,7 +4,7 @@ date: 2018-05-02 09:09:01
 categories: 设计模式
 tags: [单例, 线程安全]
 toc: true
-description: 。
+description: 单例是最常见的设计模式，如何实现单例呢？如果实现线程安全的单例呢？本文将展示单例的五种写法，比茴香豆还多一种。
 comments: false
 ---
 

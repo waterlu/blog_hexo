@@ -2,9 +2,9 @@
 title: MySQL索引
 date: 2018-05-04 08:59:11
 categories: 数据库
-tags: [MySQL, 线索引]
+tags: [MySQL, 索引]
 toc: true
-description: MySQL索引。
+description: 索引和事务是MySQL最重要的两个概念，而Innodb存储引擎的索引结构又是事务的基础，可谓重中之重。本文从二叉搜索数说起，直到B+树，详细解释MySQL索引的数据结构，试图从底层探究索引原理。
 comments: false
 ---
 

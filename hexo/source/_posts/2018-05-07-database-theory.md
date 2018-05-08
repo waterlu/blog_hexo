@@ -4,7 +4,7 @@ date: 2018-05-07 14:19:04
 categories: 数据库
 tags: [MySQL]
 toc: true
-description: 数据库原理。
+description: TODO
 comments: false
 ---
 

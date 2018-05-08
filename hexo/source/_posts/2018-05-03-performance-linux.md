@@ -1,37 +1,34 @@
 ---
-title: 性能调优 CPU占用
+title: 性能调优
 date: 2018-05-03 17:40:28
 tags:
+description: TODO
 ---
 
-top/htop查看
+## Linux性能调优
 
-top -Hp [pid]
+### CPU占用过高
 
+首先，通过top -c指令查看进程的cpu占用情况，找到cpu占用高的进程pid；
 
-
-
-
-top -c 查看进程的cpu占用情况，找到cpu占用高的进程PID
-
-top -Hp pid 查看进程内线程运行情况，找出cpu占用高的线程PID
+然后，通过top -Hp [pid]指令查看进程内线程运行情况，找出cpu占用高的线程pid；
 
 ```shell
 root@iZ2ze4k1o3ish3waeplqi8Z:~# top -Hp 14933
-PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                         14965 root      20   0 2449044 493880  15588 S  0.3 24.1   0:05.92 java                         14982 root      20   0 2449044 493880  15588 S  0.3 24.1   0:02.76 java                         14984 root      20   0 2449044 493880  15588 S  0.3 24.1   0:18.18 java                         14985 root      20   0 2449044 493880  15588 S  0.3 24.1   0:02.45 java                         14999 root      20   0 2449044 493880  15588 S  0.3 24.1   0:13.40 java
+PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                   14965 root      20   0 2449044 493880  15588 S  0.3 24.1   0:05.92 java                   14982 root      20   0 2449044 493880  15588 S  0.3 24.1   0:02.76 java                   14984 root      20   0 2449044 493880  15588 S  0.3 24.1   0:18.18 java                   14985 root      20   0 2449044 493880  15588 S  0.3 24.1   0:02.45 java                   14999 root      20   0 2449044 493880  15588 S  0.3 24.1   0:13.40 java
 ```
 
-将pid 14965转换成16进制 0x3a75
-
-printf "%x\n" 14965
-
-3a75
-
-打印进程堆栈，过滤线程pid
-
-jstack 14933 | grep '0x3a75' -C5 --color
+假设第一个线程14965占用cpu最多，将[pid]=14965转换成16进制`0x3a75` 
 
 ```shell
+root@iZ2ze4k1o3ish3waeplqi8Z:~# printf "%x\n" 14965
+3a75
+```
+
+最后，打印进程堆栈，过滤线程pid，查看线程栈，找出执行任务：
+
+```shell
+root@iZ2ze4k1o3ish3waeplqi8Z:~# jstack 14933 | grep '0x3a75' -C5 --color
 "nioEventLoopGroup-2-1" #27 prio=10 os_prio=0 tid=0x00007fe5b890b800 nid=0x3a75 runnable [0x00007fe587802000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.ch.EPollArrayWrapper.epollWait(Native Method)
@@ -40,7 +37,9 @@ jstack 14933 | grep '0x3a75' -C5 --color
 	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
 ```
 
+> 本例为虚拟例子，所以当前执行的任务是poll()。
 
+### 端口占用
 
 netstat -lap | grep 8051
 

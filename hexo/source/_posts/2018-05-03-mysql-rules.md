@@ -4,7 +4,7 @@ date: 2018-05-03 09:56:37
 categories: 数据库
 tags: [Database, MySQL]
 toc: true
-description: MySQL使用注意事项。
+description: MySQL使用注意事项，摘抄。
 comments: false
 ---
 
