@@ -4,7 +4,7 @@ date: 2018-05-03 16:14:09
 categories: 分布式
 tags: [分布式, SnowFlake]
 toc: false
-description: 在分布式情况下，尤其是分库分表情况下，如何生成表的主键是一个问题。自增主键？UUID？本文将介绍Twitter的SnowFlake算法。
+description: 在分布式情况下，尤其是分库分表情况下，如何生成表的主键是一个问题。使用自增主键还是UUID，或者有更好的办法？本文将介绍Twitter的SnowFlake算法。
 comments: false
 ---
 
