@@ -113,7 +113,7 @@ public class TestRocketMq {
 		// NameServer地址
 		String nameServer = "10.10.10.163:9876";      
       
-		// 创建消息者
+		// 创建消费者
 		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroupName);
 		consumer.setNamesrvAddr(nameServer);
       	

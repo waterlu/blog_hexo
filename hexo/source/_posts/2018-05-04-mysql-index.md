@@ -315,13 +315,19 @@ InnoDB使用聚集索引，数据记录本身被存于主索引（一颗B+Tree�
 
 ### 参考
 
+[mysql索引的实现原理](https://blog.csdn.net/debug_zhang/article/details/52168552)
+
+
+
+
+
 [](https://blog.csdn.net/bitboss/article/details/53219945)
 
 [数据结构中各种树](http://www.cnblogs.com/maybe2030/p/4732377.html)
 
 [探索B树/B+树与MySQL数据库索引的关系](https://blog.csdn.net/bitboss/article/details/53219945)
 
-[mysql索引的实现原理](https://blog.csdn.net/debug_zhang/article/details/52168552)
+
 
 [平衡二叉树、B树、B+树、B*树](https://zhuanlan.zhihu.com/p/27700617)
 
