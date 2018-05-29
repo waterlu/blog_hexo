@@ -2,7 +2,7 @@
 title: Java基础-注解
 date: 2018-05-28 14:18:08
 categories: JAVA
-tags: [JAVA, 注解]
+tags: [Java, 注解]
 toc: true
 description: 使用@interface定义注解，最常用的元注解是@Target和@Retention。Class、Method和Field类都提供了getAnnotation()方法返回注解信息。在Spring中可以调用容器类的getBeansWithAnnotation()方法得到声明了注解的Bean对象，或者实现BeanPostProcessor接口在Bean对象创建完成时进行解析和处理。
 comments: false
@@ -286,10 +286,6 @@ public class BeanPostConfiguration implements BeanPostProcessor {
 ```
 
 在IoC容器实例化每一个Bean对象以后都会调用postProcessAfterInitialization()方法，所以在这里增加对注解的处理是合适的。引申开来，我们甚至可以进行定制化修改，不返回bean对象，返回其他定制化对象。
-
-
-
-[Spring探秘|妙用BeanPostProcessor](https://www.jianshu.com/p/1417eefd2ab1)
 
 
 

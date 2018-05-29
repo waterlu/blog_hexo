@@ -2,9 +2,9 @@
 title: Java基础-反射
 date: 2018-05-28 08:50:00
 categories: JAVA
-tags: [JAVA, 反射]
+tags: [Java, 反射]
 toc: true
-description: 反射是Java语言的一种特性，通过反射机制，应用程序可以在运行期动态加载类。常用的反射类：Class、Method、Filed和Constructor，常用方法：newInstance()和invoke()：
+description: 反射是Java语言的一种特性，通过反射机制，应用程序可以在运行期动态加载类信息。常用的类有Class、Method、Filed、Constructor和Proxy，常用的方法有newInstance()和invoke()。
 comments: false
 ---
 
@@ -302,7 +302,7 @@ System.out.println(name);
 
 ```java
 public interface InvocationHandler {
-  // 
+  // 执行代理方法的入口
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
 }
 ```
@@ -311,7 +311,7 @@ public interface InvocationHandler {
 
 ```java
 public class Proxy implements java.io.Serializable {
-  // 
+  // 动态生成代理类实例对象
   public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces,
                                         InvocationHandler h) {
   }     

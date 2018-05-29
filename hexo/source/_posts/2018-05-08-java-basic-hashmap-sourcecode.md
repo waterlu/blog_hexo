@@ -2,7 +2,7 @@
 title: HashMap源码分析
 date: 2018-05-08 11:00:54
 categories: JAVA
-tags: [JAVA, Hashmap, 哈希冲突]
+tags: [Java, Hashmap, 哈希冲突]
 toc: true
 description: 对照JDK1.8源码分析HashMap的实现原理，虽然我们不需要理解底层实现原理也可以很好的使用HashMap类，但是分析源码的目的一定不仅仅是为了看如何实现，更有意义的是对一些思路和技巧的借鉴。
 comments: false

@@ -4,7 +4,7 @@ date: 2018-05-22 11:34:34
 categories: Spring
 tags: [Spring, IoC]
 toc: true
-description: Spring与IOC相关的要点，如何从XML配置一步一步发展到JavaBean配置的。
+description: Spring与IOC相关的要点，如何从XML配置一步一步发展到JavaBean配置的。（待完成）
 comments: false
 ---
 
@@ -498,10 +498,6 @@ public class MQProducerAutoConfiguration implements ApplicationContextAware {
 
 ## IoC原理
 
-
-
-
-
 ### Tomcat应用的IoC容器
 
 早期Spring经常和Tomcat一起使用，使用的是XML配置，但我们并没有像前面例子代码那样显式调用`new ClassPathXmlApplicationContext()`  ，那么Tomcat是如何创建Spring的IoC容器的呢？
@@ -853,3 +849,6 @@ public class BeanWrapperImpl implements BeanWrapper {
 }
 ```
 
+
+
+[Spring探秘|妙用BeanPostProcessor](https://www.jianshu.com/p/1417eefd2ab1)

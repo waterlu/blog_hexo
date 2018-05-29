@@ -2,9 +2,9 @@
 title: Java基础-动态代理
 date: 2018-05-28 17:42:24
 categories: JAVA
-tags: [java, 动态代理]
+tags: [Java, 动态代理]
 toc: true
-description: 从静态代理到动态代理，由浅入深逐步理解引入动态代理的目的。详细分析Proxy.newProxyInstance()方法实现原理，并对源码进行解析。
+description: 本文从静态代理到动态代理，由浅入深逐步分析引入动态代理的目的以及JDK动态代理的原理。本文详细分析了Proxy.newProxyInstance()方法实现原理，并对源码进行解析。
 comments: false
 ---
 
