@@ -140,11 +140,9 @@ public interface BlockingQueue<E> extends Queue<E> {
 
 ### CountDownLatch
 
-`latch[lætʃ]` 是门闩的意思，CountDownLatch就是倒数的门闩。我的理解就是：有N个门锁，一个一个打开，都打开就可以离开了。中文翻译我觉得应该是`倒计锁` 。
+`latch[lætʃ]` 是门闩的意思，CountDownLatch就是倒数的门闩。我的理解就是：有N个门锁，一个一个打开，都打开就可以离开了。中文翻译我觉得应该是`倒计数锁` 。
 
-每次被调用数量就减一，用来等待其他线程完成操作。下面看一个例子：
-
-初始化counter计数为2，每次调用`counter.countDown();` 计数器减1，`counter.await();` 方法阻塞到计数器为0时返回，起到和join()方法一样的效果。
+下面看一个例子：初始化counter计数为2，每次调用`counter.countDown();` 计数器减1，`counter.await();` 方法阻塞到计数器为0时返回，起到和join()方法一样的效果。
 
 ```java
 public class CountDownLatchExample {
@@ -181,9 +179,12 @@ public class CountDownLatchExample {
 }
 ```
 
-CountDownLatch与join()的区别：
+CountDownLatch与join()的联系和区别：
 
-调用thread.join()方法必须等thread线程执行完成才返回，而CountDownLatch只要检测到计数器为0就可以返回，thread线程可能还没有执行完成，所以CountDownLatch通过计数器提供了更灵活的控制机制。
+- CountDownLatch和join()都可以实现主线程等待子线程完成后再继续的效果，例如：我们的测试例子中很多时候main()方法都需要启动子线程，通过CountDownLatch和join()可以准确等到子线程执行完成后输出测试信息，否则我们只能在主线程中Thread.sleep()，看上去就很弱，另外sleep多长时间很不好确定；
+- 调用thread.join()方法必须等thread线程执行完成才返回，而CountDownLatch只要检测到计数器为0就可以返回（thread线程可以在执行过程中进行countDown()操作），所以CountDownLatch通过计数器提供了更灵活的控制机制；
+- 我们通常使用线程池启动子线程，子线程只需要实现runnable接口，这种情况下Thread类对象是封装在线程池里面的，我们不方便拿到，也就不方便调用它的join()方法；使用CountDownLatch就简单多了，只需要在run()方法退出前调用countDown()方法即可；
+- 综上，实战中CountDownLatch的应用场景比join()多。
 
 ### CyclicBarrier
 
