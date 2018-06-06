@@ -4,8 +4,8 @@ date: 2018-05-22 11:34:34
 categories: Spring
 tags: [Spring, IoC]
 toc: true
-description: Spring与IOC相关的要点，如何从XML配置一步一步发展到JavaBean配置的。（待完成）
-comments: false
+description: IoC是Spring最重要的组织部分，面向接口编程是IoC的基础，本文介绍IoC的基本概念以及如何使用XML文件、注解和Java代码配置Bean对象。
+comments: true
 ---
 
 ## IoC概述
@@ -14,15 +14,15 @@ IoC（Inversion of Control），顾名思义控制反转，什么是控制反转
 
 > 个人理解：Spring容器成为Bean对象的代理或中介。
 
-经常与Ioc一起出现的还有DI（Dependency Injection）依赖注入。依赖注入的意思是应用程序需要的对象是依赖于Spring容器注入的，不是自己创建的。看上去和IoC是一个意思，个人理解DI是具体实现IoC的一种方法，通过依赖Spring容器注入对象的方式实现了应用程序把对象的控制权转交给了Spring容器。
+经常与Ioc一起出现的还有DI（Dependency Injection）依赖注入。依赖注入的意思是应用程序需要的对象是依赖于Spring的IoC容器注入的，不是自己创建的。看上去和IoC是一个意思，个人理解DI是具体实现IoC的一种方法，通过依赖IoC容器注入对象的方式实现了应用程序把对象的控制权转交给了IoC容器。除了DI依赖注入实现IoC以外，还可以DL（Dependency  Lookup）主动从IoC容器中读取Bean对象。
 
-> 如果用租房来比喻，常规方式就是租户自己联系房东租房，IoC就是租户把找房子这件事代理给中介来完成，DI就是中介会帮租户找好房子，租户直接入住就好。（IoC还有可能是中介帮租户联系房东，租户一个一个看房，DI就是租户完全授权给中介，中介直接帮他定一个）。
+> 如果用租房来比喻，常规方式就是租户自己找房子，IoC就是租户把找房子这件事交给给中介来完成，DI就是中介找好房子把信息Push给租户，DL就是租户主动从中介Pull房子信息。
 
 ### 面向接口编程
 
-自己管理对象不是很好吗，为什么要使用IoC，把控制权交给Spring容器呢？
+自己管理对象不是很好吗，为什么要使用IoC，把控制权交给IoC容器呢？
 
-我理解，目的当然是解耦合。对象由Spring容器管理意味着应用程序不必依赖固定的Bean对象，就像租房只要找到满足条件的房子即可，不必非要指定一套房子，这就是解耦合。因此可以得出结论：面向接口编程是IoC的基础，如果应用程序声明注入是实体类，那么还是强耦合的；所以通常应用程序声明注入的都是接口，这才能发挥Spring IoC的作用。
+我理解，目的当然是解耦合。对象由IoC容器管理意味着应用程序不必依赖固定的Bean对象，就像租房只要找到满足条件的房子即可，不必非要指定某一套房子，这就是解耦合。因此可以得出结论：面向接口编程是IoC的基础，如果应用程序声明注入是实体类，那么还是强耦合的；所以通常应用程序声明注入的Bean对象都是接口，这样才能更好发挥IoC的作用。
 
 例如：注入UserService接口后可以方便的切换实现类以实现不同的目标。
 
@@ -37,7 +37,7 @@ public class UserServiceDatabaseImpl implements UserService {
 }
 ```
 
-应用程序使用时声明注入的是接口，具体实现可以通过打开和关闭@Component注解切换
+应用程序使用时声明注入的是接口，具体实现类可以通过打开和关闭@Component注解切换，引入方无感知。
 
 ```java
 @Autowired
@@ -48,21 +48,28 @@ UserService userService;
 
 ## IoC使用
 
-### Bean配置
+### 配置Bean对象
 
-既然Spring容器负责管理类对象，那么它就得知道哪些类对象需要被管理。随着Spring的发展，配置bean对象的方法也在变化，可以使用XML配置文件，也可以使用注解或者JavaConfig，下面我们就来看一下配置方式的进化过程。
+既然我们想把管理对象的工作交给IoC容器，那么它就得知道哪些对象需要被管理。随着Spring的发展，告诉IoC容器需要管理哪些Bean对象的方式也在变化，可以使用XML配置文件，也可以使用注解或者JavaConfig。
 
 #### XML配置
 
-把需要创建的对象（Spring称之为Bean）定义在一个xml文件里面，每个bean指定ID和对应类。IoC容器读取这个xml文件，通过反射创建类对象，通过ID返回类对象。Bean里面可以通过property属性显式定义bean的依赖，也可以不定义，让Spring完成自动配置。
+把需要创建的Bean对象定义在一个xml文件里面，每个bean指定ID和对应类。IoC容器读取这个xml文件，通过反射创建Bean对象，通过ID返回Bean对象。同样，Bean对象之间的依赖关系也通过xml文件来配置。
+
+##### bean标签
+
+具体通过bean标签来配置一个Bean对象，通过class属性反射创建，通过id属性引用Bean对象；
+
+- <property ref="" /> - 对应Bean对象的属性，形成依赖关系，调用set()方法设置；
+- <property value="" /> - 也可以通过value属性直接赋值；
+- <constructor-arg ref="" /> - 对应Bean对象构造函数的参数，形成依赖关系，通过构造函数设置；
+- ref - ref就是Reference，引用，值为Bean的id；
 
 例如：配置/resources/spring-context.xml如下：定义了car和wheel两个bean，car依赖wheel
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
 <beans>
-  <bean id="car" class="cn.lu.spring.ioc.Car" scope="singleton">
-    <!--constructor-arg ref="wheel" /-->
+  <bean id="car" class="cn.lu.spring.ioc.Car">
     <property name="wheel" ref="wheel" />
   </bean>
   <bean id="wheel" class="cn.lu.spring.ioc.Wheel"/>
@@ -87,8 +94,7 @@ public class Wheel {
 使用如下：
 
 - ApplicationContext类可以理解为IoC容器，ClassPathXmlApplicationContext类是从classpath目录读取XML文件来解析Bean的IoC容器实现；
-- 调用容器类的getBean()方法就可以从容器中获取Bean对象了，传入的参数可以是ID，也可以是类名；
-- Bean对象之间的依赖关系可以在XML中定义bean时通过property属性设置，相当于调用set方法，也可以使用constructor-arg设置，相当于在构造函数中传入依赖对象。
+- 调用容器类的getBean()方法就可以从容器中获取Bean对象了，传入的参数可以是ID，也可以是类名。
 
 ```java
 @RunWith(BlockJUnit4ClassRunner.class)
@@ -96,27 +102,87 @@ public class IoCTest {
   private ApplicationContext context;
   @Before
   public void before() {
-    context = new ClassPathXmlApplicationContext("classpath:spring-context.xml");
+    context = new ClassPathXmlApplicationContext("classpath:spring-bean.xml");
   }
   @Test
   public void testContext() {
-    Car car = (Car)context.getBean("car");
-    // Car car = context.getBean(Car.class);
+    Car car = context.getBean(Car.class);
   }
 }
 ```
 
 以上这种用法非常好理解，ApplicationContext类读取XML文件并构造Bean对象，通过getBean()返回对象，ApplicationContext类就是IoC容器。容器需要做的就是解析XML文件，通过反射构造对象。
 
-> 以上方法实际上没有实现依赖注入，需要自己主动获取。
+> 以上方法实际上没有实现DI依赖注入，需要自己主动获取，这种实现方式也被称作DL依赖查找。
+
+##### scope
+
+Bean对象具有scope属性，常用的有两种：Singleton和Prototyp，默认是Singleton：
+
+- Singleton，一个容器只创建一个Bean实例，每次getBean()都返回相同的实例；
+- Prototyp，每次getBean()都新创建一个Bean实例；
+- Session，每个HTTP Session创建一个Bean实例。
+
+> 注意：Singleton强调一个容器只有一个Bean实例，不同容器可以有不同Bean实例。
+
+##### import标签
+
+如上所述，xml配置是非常好理解的。但是，我们需要把所有用到的bean对象都定义在xml文件中，而且还要定义bean对象之间复杂的依赖关系，xml文件将越来越庞大。实战中，会根据类型不同创建多个xml文件，并通过`<import>`标签引入。
+
+例如：
+
+```xml
+
+```
+
+##### 读取配置文件
+
+类似配置数据源时，用户名和密码等信息我们一般不会直接写在xml文件里面，而是放在单独的properties文件中，使用`<content:property-placeholder />` 标签可以读取配置文件。
+
+例如：
+
+```xml
+<beans> 
+  <context:property-placeholder location="classpath:db.properties" />
+  <bean id="database" class="cn.lu.spring.ioc.placeholder.Database">
+    <property name="driver" value="${db.driver}" />
+    <property name="url" value="${db.url}" />
+    <property name="username" value="${db.username}" />
+    <property name="password" value="${db.password}" />
+  </bean>
+</beans>   
+```
+
+> 注意：`${db.username}` 如果换成 `${username}` 将读取到本地用户。也就是说是由内置变量的，所以通常在properties文件中属性都要加前缀，避免冲突。
+
+##### 自动装配
+
+前面我们使用`<property>` 属性手工配置了Car对象和Wheel对象的依赖关系，此外，还可以使用`autowire` 属性自动装配。自动装配意味着IoC自动帮我找到Wheel对象，并赋值到Car对象的wheel属性。
+
+```xml
+<beans>
+  <bean id="car" class="cn.lu.spring.ioc.Car" autowire="byType">
+  <bean id="wheel" class="cn.lu.spring.ioc.Wheel"/>
+</beans>
+```
+
+`autowire` 属性有三个值：
+
+- no - 默认值，默认不自动装配；
+- byName - 通过Bean的id自动装配，这里我们把`id="wheel"` 修改了`id="wheel2"` 装配将会失败；
+- byType - 通过Bean的class自动装配，最常用。
+
+byType自动装配时，如果没有根据类型找到对象，或者找到多个对象，都会抛出异常。
+
+
 
 #### 注解配置
 
-如上所述，我们需要把所有用到的bean对象都定义在xml文件中，xml文件将越来越庞大。Spring 2.5以后出现了注解方式，使用注解意味着将集中的bean配置（xml文件）分散到各个bean对象中。个人觉得没有两种用法没有好坏之分。
+Spring 2.5以后出现了注解方式，使用注解意味着将集中的bean配置（xml文件）分散到各个bean对象中。个人觉得没有两种用法没有好坏之分。
 
-##### 注解
+##### @Component注解
 
-@Component注解起到XML文件中`<bean/>` 一样的作用，下面两种写法是等同的。
+@Component注解起到XML文件中`<bean/>` 标签一样的作用，下面两种写法是等同的。
 
 ```java
 @Component("car")
@@ -127,16 +193,20 @@ public class Car {}
 <bean id="car" class="Car"/>
 ```
 
-@Component注解的value属性等同于bean的id属性，@Component的value默认值为首字母小写的类名，一般可以省略。从@Component又衍生出@Controller、@Service和@Repository注解，用在不同层，本质是一样的。
+@Component注解的value属性等同于bean的id属性，@Component的value默认值为首字母小写的类名，一般可以省略。从@Component又衍生出@Controller、@Service和@Repository注解，本质是一样的。
 
-@Autowired/@Resource注解起到XML文件中<bean.property>和<bean.constructor-arg>的作用，@Autowired注解可以修饰类的成员变量，也可以修饰类的构造函数和成员方法。
+##### @Autowired注解
+
+@Autowired/@Resource注解起到XML文件中`autowird` 属性的作用，@Autowired注解可以修饰类的成员变量，也可以修饰类的构造函数和成员方法。
 
 @Autowired和@Resource的区别：
 
-- @Autowired默认通过bean的类型注入；
-- @Resource默认通过bean的名字注入。
+- @Autowired默认通过bean的类型注入，等价于`autowire="byType"` ；
+- @Resource默认通过bean的名字注入，等价于`autowire="byName"`。
 
-引入@Autowired注解后真正实现了依赖注入，当我们需要使用一个对象时，直接将其声明为@Autowired，容器负责帮我们构造这个对象的实例。@Autowired注解默认是按照类型构造的，也就是说容器负责查找实现类并通过反射进行构造，所以通常@Autowired注解修饰的是接口。
+##### 依赖注入
+
+引入自动装配和@Autowired注解后真正实现了依赖注入，当我们需要使用一个对象时，直接将其声明为@Autowired，容器负责帮我们构造这个对象的实例。@Autowired注解默认是按照类型构造的，也就是说容器负责查找实现类并通过反射进行构造，所以通常@Autowired注解修饰的是接口。
 
 进一步思考一下，如果一个@Autowired注解修饰的接口有多个实现类，那么容器就不知道应该构造哪个类了，怎么办？这个时候我们可以增加@Qualifier注解来指定bean的名称。下面以UserService为例，有UserServiceMemoryImpl和UserServiceDatabaseImpl两个实现类，实现选择数据库实现，代码如下：
 
@@ -148,15 +218,19 @@ UserService userService;
 
 > 因为@Component默认bean名称为首字母小写的类名，所以可以使用userServiceDatabaseImpl，如果UserServiceDatabaseImpl在@Component中自定义了bean名称，那么要使用自定义的。
 
-##### 例子
+##### component-scan
 
-引入注解后需要增加一个新的配置，就是到哪里去查找注解，所以使用注解后的xml配置文件如下：
+虽然加入@Component注解以后我们不需要在xml文件中定义<bean/>了，但是我们还是需要告诉IoC容器去哪里扫描@Component注解，通过` <context:component-scan>` 标签实现。
 
 ```xml
 <beans>
-  <context:component-scan base-package="cn.lu.spring.ioc" />
+  <context:component-scan base-package="cn.lu.spring.ioc.bean" />
 </beans>
 ```
+
+实际上在AutowiredAnnotationBeanPostProcessor中处理自动装配，但是要求开发者在xml文件中自己定义这个类的bean对象显然太low了，所以Spring为我们提供了`<context:annotation-config>` 标签来加载类似功能的类，由于` <context:component-scan>`包含了`<context:annotation-config>` 的功能，所以可以省略。
+
+##### 例子
 
 Bean对象如下：
 
@@ -177,9 +251,8 @@ public class Wheel {
 
 ```java
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"spring-context.xml"})
+@ContextConfiguration(locations = {"spring-bean.xml"})
 public class IoCTest {
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
   @Autowired
   private Car car;
   @Test
@@ -193,11 +266,18 @@ public class IoCTest {
 
 #### Java配置
 
+总结，到目前为止我们的用法是：
+
+- 在xml文件中定义component-scan，指向bean对象的包名；
+- 在类中使用@Component和@Autowired注解。
+
 从Spring 3.0开始提供了Java Config也叫做Java配置，Spring Boot建议使用Java配置替代XML配置。
 
 Java配置引入了@Configuration、@Bean、@ImportResource和@Value等注解。
 
-@Configuration注解就相当于一个xml文件，@Bean注解就相当于xml文件中的一个`<bean/>`  ，@ComponentScan注解相当于xml文件中的`<context:component-scan />` 。
+##### @Configuration注解
+
+@Configuration注解就相当于一个xml文件，@Bean注解就相当于xml文件中的一个`<bean/>`  ，
 
 例如：Java配置
 
@@ -228,11 +308,24 @@ public class Config {
 </beans>
 ```
 
+##### @ComponentScan注解
+
+@ComponentScan注解相当于xml文件中的`<context:component-scan />` 。
+
+所以我们可以把xml文件替换为Java类
+
+```java
+@Configuration
+@ComponentScan("cn.lu.spring.ioc.bean")
+public class JavaConfig {
+}
+```
+
 使用时和前面基本一样，只需要把@ContextConfiguration配置的xml文件替换为class类
 
 ```java
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {Config.class})
+@ContextConfiguration(classes = {JavaConfig.class})
 public class IoCTestWithJavaConfig {
 }
 ```
@@ -241,14 +334,20 @@ public class IoCTestWithJavaConfig {
 
 现在我们有三种方法定义一个Bean，选择哪一个呢？
 
+XML配置
+
 ```xml
 <bean id="car" class="cn.lu.spring.ioc.Car"/>
 ```
 
+注解配置
+
 ```java
-// @Component
+@Component
 public class Car {}
 ```
+
+Java配置
 
 ```java
 @Configuration
@@ -260,7 +359,7 @@ public class JavaConfiguratoin {
 }
 ```
 
-习惯上，我们使用第二种方法@Component注解（实际更多使用@Controller、@Service等注解）来配置我们的业务Bean，XML不再使用，Java配置用来完成非业务Bean的配置。
+习惯上，我们使用第二种方法@Component注解（实际更多使用@Controller、@Service等注解）来配置我们的业务Bean，XML不再使用，Java配置用来完成非业务Bean（例如：数据源）的配置。
 
 > 个人理解：@Component注解是侵入式的，XML和Java配置是不需要侵入源代码的，这是他们的优势。
 
@@ -339,7 +438,54 @@ public class DemoApplication {
 
 > @EnableAutoConfiguration是SpringBoot特性，和IoC无关，这里不展开。
 
-### 高级使用
+#### @ConfigurationProperties
+
+@PropertySource注解起到和`<context:property-placeholder>` 标签一样的作用，读取proerties配置文件，并映射到Bean对象中。
+
+```java
+@Component
+@PropertySource("classpath:db.properties")
+public class DatabaseInfo {
+  @Value("${db.driver}")
+  private String driver;
+  @Value("${db.url}")  
+  private String url;
+  @Value("${db.usernae}")
+  private String userame;
+  @Value("${db.password}")
+  private String password;
+}
+```
+
+@PropertySource注解和@Value注解配合使用，@Value可以设置默认值，例如：password默认值为`******`
+
+```java
+@Value("${db.password:******}")
+private String password;
+```
+
+Spring Boot 提供了@ConfigurationProperties注解，读取配置文件更方便，可以不加@Value注解。prefix属性定义前缀名，连接符转换为驼峰，例如：`db.driver-class-name` 对应driverClassName。
+
+```java
+@ConfigurationProperties(prefix = "db")
+public class DataSourceProperties {
+  private String driver;
+  private String url;
+  private String username;
+  private String password;
+}
+```
+
+为了生效还必须添加@EnableConfigurationProperties注解。
+
+```java
+@Configuration
+@EnableConfigurationProperties(DataSourceProperties.class)
+public class Config {
+}
+```
+
+### 扩展使用
 
 前面介绍了IoC的最基本用法，帮助我们的应用程序创建类实例对象，下面看看其他用法。
 
@@ -382,16 +528,6 @@ UserController afterPropertiesSet
 UserController @PreDestroy
 ```
 
-#### @Scope
-
-常用的Scope有两种：Singleton和Prototyp，默认是Singleton：
-
-- Singleton，一个容器只创建一个Bean实例，每次getBean()都返回相同的实例；
-- Prototyp，每次getBean()都新创建一个Bean实例；
-- Session，每个HTTP Session创建一个Bean实例。
-
-> 注意：Singleton强调一个容器只有一个Bean实例，不同容器可以有不同Bean实例。
-
 #### @Profile
 
 @Profile注解为我们提供了在不同环境下创建不同Bean实例的能力。
@@ -414,45 +550,10 @@ public class DatabaseConfig {
 }
 ```
 
-```java
-@Autowired
-DataSource dataSource;
-```
-
 DataSource是接口，DevDataSource和ProdDataSource是具体实现，根据运行环境的不同返回不同的实现。运行环境通过配置application.properties切换。
 
 ```properties
 spring.profiles.active=dev
-```
-
-#### @Value
-
-使用@Value注解可以注入属性值，最常见的是从application.properties中读取配置。
-
-```java
-@Component
-public class Book {
-    @Value("${book.name}")
-    private String bookName;
-}
-```
-
-`@Value("${book.name}")` 表示读取配置文件中`book.name` 的值，application.properties配置如下：
-
-```properties
-book.name=Spring
-```
-
-不要忘了@Component注解，只有Spring容器管理的Bean才可以使用@Value注解。
-
-使用@Value注解还可以读取其他Bean的属性 ，例如：以下代码从company这个Bean中读取name字段并赋值到Book的bookPub字段，和前面的区别是`$`换成了`#` 。
-
-```java
-@Component
-public class Book {
-    @Value("#{company.name}")
-    private String bookPub;
-}
 ```
 
 #### @ImportResource
@@ -466,43 +567,28 @@ public class XmlConfiguration {
 }
 ```
 
-#### ApplicationContextAware
+#### @Import
 
-有时候我们需要读取容器中的其他类实例对象，例如：自定义注解后，需要扫描注解来实现自定义逻辑。以下以RocketMQ自定义的@RocketMQProduer注解为例：
-
-- 实现ApplicationContextAware接口的setApplicationContext()方法获得容器；
-- 在构造函数完成后调用ApplicationContext的getBeansWithAnnotation()方法获得所有声明了@RocketMQProducer注解的类实例对象。
+和@ImportResource注解类似，使用@Import注解可以导入其他配置类
 
 ```java
-public class MQProducerAutoConfiguration implements ApplicationContextAware {
-  protected ApplicationContext applicationContext;
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
-  @PostConstruct
-  public void init() throws Exception {
-    Map<String, Object> beans = null;
-    beans = applicationContext.getBeansWithAnnotation(RocketMQProducer.class);
-  }
+@Configuration
+@ImportResource({DatabaseConfig.class, RedisConfig.class})
+public class AppConfiguration {
 }
 ```
 
-#### BeanPostProcessor
+## IoC容器
 
+### JUnit
 
+我们的测试用例中使用ClassPathXmlApplicationContext做IoC容器，需要手工创建，并传入xml文件名。
 
-#### BeanFactoryPostProcessor
+### Tomcat
 
+Spring和Tomcat集成后，使用的是WebApplicationContext，通过ContextLoaderListener创建。
 
-
-## IoC原理
-
-### Tomcat应用的IoC容器
-
-早期Spring经常和Tomcat一起使用，使用的是XML配置，但我们并没有像前面例子代码那样显式调用`new ClassPathXmlApplicationContext()`  ，那么Tomcat是如何创建Spring的IoC容器的呢？
-
-答案就在webapp/WEB-INF/web.xml中，关键点就是ContextLoaderListener
+ContextLoaderListener配置在webapp/WEB-INF/web.xml中：
 
 ```xml
 <listener>
@@ -510,13 +596,14 @@ public class MQProducerAutoConfiguration implements ApplicationContextAware {
 </listener>
 ```
 
-Tomcat中使用的是ApplicationContext的另外一个子类WebApplicationContext，ContextLoaderListener是Tomcat的一个ServletContext，当它初始化的时候创建WebApplicationContext容器类。
+ContextLoaderListener是Tomcat的一个ServletContext，当它初始化的时候创建WebApplicationContext容器类。
 
 ```java
 package org.springframework.web.context;
 import javax.servlet.ServletContextListener;
 public class ContextLoaderListener extends ContextLoader implements ServletContextListener {
   public void contextInitialized(ServletContextEvent event) {
+    // Context初始化时创建IoC容器
     this.initWebApplicationContext(event.getServletContext());
   }  
   public void contextDestroyed(ServletContextEvent event) {
@@ -543,7 +630,7 @@ public class ContextLoader {
 
 这里可以看到最终调用createWebApplicationContext()方法返回WebApplicationContext类实例对象，这就是Tomcat中的IoC容器。后面的操作大家都了解了，WebApplicationContext容器负责管理Bean对象。
 
-### SpringBoot应用的IoC容器
+### SpringBoot
 
 我们再来看看目前流行的SpringBoot是如何创建Spring的IoC容器的。
 
@@ -596,259 +683,11 @@ public class SpringApplication {
 
 由于我们大部分是web应用，所以使用的是AnnotationConfigEmbeddedWebApplicationContext，从名字上可以看出，这个ApplicationContext（容器）是基于注解创建的，支持嵌入式web应用。
 
-### Spring IoC源码分析
 
-入口是AbstractApplicationContext的refresh()方法，我们从这里开始。
-
-```java
-package org.springframework.context.support;
-public abstract class AbstractApplicationContext {
-  public void refresh() throws BeansException, IllegalStateException {
-    synchronized (this.startupShutdownMonitor) {
-      // 创建BeanFactory
-      ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
-
-      // Allows post-processing of the bean factory in context subclasses.
-      postProcessBeanFactory(beanFactory);
-
-      // Invoke factory processors registered as beans in the context.
-      invokeBeanFactoryPostProcessors(beanFactory);
-
-      // Register bean processors that intercept bean creation.
-      registerBeanPostProcessors(beanFactory);
-
-      // 实例化Bean
-      finishBeanFactoryInitialization(beanFactory);
-    }
-  }
-}
-```
-
-最重要的两个方法是obtainFreshBeanFactory()和finishBeanFactoryInitialization()，前者读取Bean相关配置信息，后者创建Bean实例。
-
-```java
-package org.springframework.context.support;
-public abstract class AbstractApplicationContext {
-  protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
-    refreshBeanFactory();
-    return this.beanFactory;
-  }
-}
-```
-
-```java
-package org.springframework.context.support;
-public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext {
-  @Override
-  protected final void refreshBeanFactory() throws BeansException {
-    DefaultListableBeanFactory beanFactory = createBeanFactory();
-    loadBeanDefinitions(beanFactory);
-    synchronized (this.beanFactoryMonitor) {
-      this.beanFactory = beanFactory;
-    }
-  }
-}
-```
-
-```java
-package org.springframework.beans.factory.support;
-public class DefaultListableBeanFactory extends AbstractBeanFactory {
-  private final Map<String, BeanDefinition> beanDefinitionMap = new 
-    ConcurrentHashMap<String, BeanDefinition>(256);
-}
-```
-
-以XML配置为例，AbstractApplicationContext类的子类AbstractXmlApplicationContext实现了loadBeanDefinitions()方法，完成加载和解析XML文件的操作，并将BeanDefinition信息放入到BeanFactory中。其中，BeanDefinition与XML文件中的一个`<bean />` 相对应，BeanFactory接口的默认实现类是DefaultListableBeanFactory，可以看到DefaultListableBeanFactory中使用ConcurrentHashMap来保存Bean信息。
-
-这就完成了第一步工作，解析XML文件读取配置信息到BeanFactory的Map中保存。
-
-接下来看看如何根据上面的信息实例化对象。
-
-```java
-package org.springframework.context.support;
-public abstract class AbstractApplicationContext {
-  protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
-    // Stop using the temporary ClassLoader for type matching.
-    beanFactory.setTempClassLoader(null);
-    // Allow for caching all bean definition metadata, not expecting further changes.
-    beanFactory.freezeConfiguration();
-    // Instantiate all remaining (non-lazy-init) singletons.
-    beanFactory.preInstantiateSingletons();
-  }
-```
-
-AbstractApplicationContext调用BeanFactory的方法来实例化对象。
-
-```java
-package org.springframework.beans.factory.support;
-public class DefaultListableBeanFactory extends AbstractBeanFactory {	
-  @Override
-  public void preInstantiateSingletons() throws BeansException {
-    List<String> beanNames = new ArrayList<String>(this.beanDefinitionNames);
-    for (String beanName : beanNames) {
-      getBean(beanName);
-    }
-  }
-  @Override
-  public Object getBean(String name) throws BeansException {
-    return doGetBean(name, null, null, false);
-  }
-}
-```
-
-```java
-package org.springframework.beans.factory.support;
-public abstract class AbstractBeanFactory implements BeanFactory {
-  
-  protected <T> T doGetBean(final String name, final Class<T> requiredType, 
-                            final Object[] args, boolean typeCheckOnly) {
-    final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
-    if (mbd.isSingleton()) {
-      sharedInstance = getSingleton(beanName, new ObjectFactory<Object>() {
-        @Override
-        public Object getObject() throws BeansException {
-          try {
-            return createBean(beanName, mbd, args);
-          }
-          catch (BeansException ex) {
-            destroySingleton(beanName);
-            throw ex;
-          }
-        }
-      });
-      bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
-    } else if (mbd.isPrototype()) {
-      // It's a prototype -> create a new instance.
-      Object prototypeInstance = null;
-      try {
-        beforePrototypeCreation(beanName);
-        prototypeInstance = createBean(beanName, mbd, args);
-      }
-      finally {
-        afterPrototypeCreation(beanName);
-      }
-      bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
-    }
-    return (T) bean;
-  }
-}
-```
-
-DefaultListableBeanFactory类的getBean()方法会调用AbstractBeanFactory类的doGetBean()方法，里面通过createBean()方法创建实例对象。
-
-```java
-package org.springframework.beans.factory.support;
-public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
-  @Override
-  protected Object createBean(String beanName, RootBeanDefinition mbd, Object[] args) {
-	Object beanInstance = doCreateBean(beanName, mbdToUse, args);
-    return beanInstance;
-  }
-  protected Object doCreateBean(final String beanName, final RootBeanDefinition mbd, 
-                                final Object[] args) {
-      BeanWrapper instanceWrapper = null;
-    instanceWrapper = createBeanInstance(beanName, mbd, args);
-    final Object bean = instanceWrapper.getWrappedInstance();
-  }
-  protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd,
-                                           Object[] args) {
-    
-  }
-  protected BeanWrapper instantiateBean(final String beanName, 
-                                        final RootBeanDefinition mbd) {
-      
-  }
-}
-```
-
-AbstractAutowireCapableBeanFactory类的createBean()方法
-
-
-
-```java
-package org.springframework.beans.factory.support;
-public class SimpleInstantiationStrategy implements InstantiationStrategy {
-  	@Override
-	public Object instantiate(RootBeanDefinition bd, String beanName, BeanFactory owner) {
-      Constructor<?> ctor =	clazz.getDeclaredConstructor((Class[]) null);
-      ctor.setAccessible(true);
-      return ctor.newInstance(null);
-    }
-}
-```
-
-
-
-
-
-```java
-package org.springframework.beans.factory.support;
-public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
-  protected void populateBean(String beanName, RootBeanDefinition mbd, BeanWrapper bw) {
-    applyPropertyValues(beanName, mbd, bw, pvs);
-  }
-  protected void applyPropertyValues(String beanName, BeanDefinition mbd, BeanWrapper bw,
-                                     PropertyValues pvs) {
-    MutablePropertyValues mpvs = null;
-    List<PropertyValue> original;
-    for (PropertyValue pv : original) {
-      
-    }
-    bw.setPropertyValues(new MutablePropertyValues(deepCopy));
-  }
-}
-
-```
-
-
-
-```java
-package org.springframework.beans;
-public class BeanWrapperImpl implements BeanWrapper {
-  private class BeanPropertyHandler extends PropertyHandler {
-    private final PropertyDescriptor pd;
-    @Override
-    public void setValue(final Object object, Object valueToApply) throws Exception {
-      final Method writeMethod = (this.pd instanceof GenericTypeAwarePropertyDescriptor ?
-                                  ((GenericTypeAwarePropertyDescriptor) this.pd).getWriteMethodForActualAccess() :
-                                  this.pd.getWriteMethod());
-      if (!Modifier.isPublic(writeMethod.getDeclaringClass().getModifiers()) && !writeMethod.isAccessible()) {
-        if (System.getSecurityManager() != null) {
-          AccessController.doPrivileged(new PrivilegedAction<Object>() {
-            @Override
-            public Object run() {
-              writeMethod.setAccessible(true);
-              return null;
-            }
-          });
-        }
-        else {
-          writeMethod.setAccessible(true);
-        }
-      }
-      final Object value = valueToApply;
-      if (System.getSecurityManager() != null) {
-        try {
-          AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
-            @Override
-            public Object run() throws Exception {
-              writeMethod.invoke(object, value);
-              return null;
-            }
-          }, acc);
-        }
-        catch (PrivilegedActionException ex) {
-          throw ex.getException();
-        }
-      }
-      else {
-        writeMethod.invoke(getWrappedInstance(), value);
-      }
-    }      
-  }
-}
-```
 
 
 
 [Spring探秘|妙用BeanPostProcessor](https://www.jianshu.com/p/1417eefd2ab1)
+
+[bean作用域：理解Bean生命周期](https://blog.csdn.net/soonfly/article/details/69480058)
+

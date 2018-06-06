@@ -5,7 +5,7 @@ categories: JAVA
 tags: [Java, 泛型]
 toc: true
 description: 泛型是参数化类型，也就是类型成为了变量。泛型只在编译期有效，运行期实际上泛型是不存在的，这称为类型擦除。本文给出了实战中使用泛型Class对象和读取泛型真实类型的例子代码。
-comments: false
+comments: true
 ---
 
 ## Java泛型

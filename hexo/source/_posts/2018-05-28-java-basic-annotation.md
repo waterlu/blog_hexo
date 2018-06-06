@@ -5,7 +5,7 @@ categories: JAVA
 tags: [Java, 注解]
 toc: true
 description: 使用@interface定义注解，最常用的元注解是@Target和@Retention。Class、Method和Field类都提供了getAnnotation()方法返回注解信息。在Spring中可以调用容器类的getBeansWithAnnotation()方法得到声明了注解的Bean对象，或者实现BeanPostProcessor接口在Bean对象创建完成时进行解析和处理。
-comments: false
+comments: true
 ---
 
 ## Java注解

@@ -6,6 +6,7 @@ tags: [hexo, github]
 toc: true
 description: 搭建个性化的博客网站，我们需要用到hexo和github。其中Hexo是一个快速、简洁且高效的博客框架，使用hexo我们可以快速编写、生成、预览和部署博客文章。最终我们的博客文章发布到github上。Github为个人博客提供了免费的发布平台，通过域名yourname.github.io可以访问到同名的github项目。
 mathjax2: true
+comments: true
 ---
 
 ## 概述
@@ -169,9 +170,46 @@ menu:
 
 ### 评论功能
 
-> TODO
->
-> 
+使用Valine评论系统，主页在[这里](https://valine.js.org/) 。
+
+由于Valine是基于[LeanCloud](https://leancloud.cn/) 的，所以必须首先在LeanCloud上注册账号。注册成功后登录LeanCloud创建应用，得到AppId和Appkey，需要在配置文件中使用。具体操作步骤可以参考Valine官方文档。
+
+以上就是全部准备工作，下面开始在Hexo中配置：
+
+- 安装valine
+
+```shell
+$ npm install valine --save
+```
+
+- 修改themes\maupassant下的_config.yml
+
+```properties
+valine: ## https://valine.js.org
+  enable: true
+  appid: 输入在LeanCloud上得到的AppId
+  appkey: 输入在LeanCloud上得到的Appkey
+  notify: false
+  verify: false
+  placeholder: just go go
+  avatar: 'mm'
+  pageSize: 10
+  guest_info: nick,mail,link
+```
+
+appid和appkey必须输入，placeholder是文本占位符，可以根据需要修改，其他属性可不修改，保持默认即可。
+
+完成以上配置后，在文章中打开comment功能，就可以在文章后面进行评论了，而且支持匿名评论。
+
+```json
+title: 使用Hexo搭建自己的博客
+date: 2018-04-21 10:00:00
+comments: true
+```
+
+最后，可以登录到LeanCloud上维护评论数据，如果你觉得哪条评论不爽，可以删除。
+
+选中应用后，评论在[存储]=>[数据]=>[Comment]中。
 
 ### 站内搜索
 
