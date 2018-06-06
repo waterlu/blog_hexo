@@ -5,7 +5,7 @@ categories: 消息队列
 tags: [mq, rocketmq]
 toc: true
 description: RocketMQ由NameServer和BrokerServer组成。NameServer作为注册中心做服务发现；BrokerServer提供消息发布、存储和订阅功能。下面介绍3.1.4和4.2.0两个版本的安装和使用。
-comments: false
+comments: true
 ---
 
 由于用到了事务消息功能，所以我使用的是3.1.4版本，这是一个非常老的版本，3.x最新稳定版本是3.5.8。

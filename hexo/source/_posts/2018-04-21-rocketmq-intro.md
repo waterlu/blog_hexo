@@ -6,7 +6,7 @@ categories: 消息队列
 tags: [mq, rocketmq]
 toc: true
 description: RocketMQ是阿里巴巴开源的一款高性能、高吞吐率的分布式消息中间件。产品基于高可用分布式集群技术，提供消息发布订阅、消息轨迹查询、定时（延时）消息、资源统计、监控报警等功能，是阿里巴巴双11使用的核心产品。2016年阿里巴巴正式宣布将RocketMQ捐赠给Apache软件基金会。
-comments: false
+comments: true
 ---
 
 ## 简介

@@ -5,7 +5,7 @@ categories: 消息队列
 tags: [mq, rocketmq, springboot]
 toc: true
 description: 虽然RocketMQ已经在2018年提供官方starter实现了和Spring Boot集成，但目前提供的功能还太简单，距离实际应用还有差距。这里我给出自己的开源实现waterloo-starter-rocketmq。
-comments: false
+comments: true
 ---
 
 ## 集成RocketMQ

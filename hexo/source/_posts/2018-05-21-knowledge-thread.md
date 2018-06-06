@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [多线程]
 toc: true
 description: Java多线程知识点汇总，全部干货。
-comments: false
+comments: true
 top: true
 ---
 

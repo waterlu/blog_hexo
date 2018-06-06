@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [并发, 多线程]
 toc: true
 description: 一个新线程启动后，从开始运行一直到最后任务执行完成销毁这个线程，在整个线程生命周期中有哪几个状态，各个状态之间如何流转，本文将给出详细解释。
-comments: false
+comments: true
 ---
 
 ## 线程状态

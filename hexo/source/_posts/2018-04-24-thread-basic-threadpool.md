@@ -6,7 +6,7 @@ categories: 并发编程
 tags: [并发, 线程, 线程池, 任务调度]
 toc: true
 description: Executor和ExecutorService为我们提供了线程异步执行的接口。其中比较重要的是submit()和shutdown()，分别实现任务的提交和线程池的关闭。
-comments: false
+comments: true
 ---
 
 ## 任务调度

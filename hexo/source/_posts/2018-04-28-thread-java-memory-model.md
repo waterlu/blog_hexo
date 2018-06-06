@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [并发, 线程, 内存模型, 内存可见性, 指令重排序]
 toc: true
 description: 什么是Java内存模型？Java内存模型包含哪些内容，又能解决哪些问题？本文将引出内存可见性和指令重排序的概念，并阐述由此引发的多线程并发问题和解决方案。
-comments: false
+comments: true
 ---
 
 ## Java内存模型

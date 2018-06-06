@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [并发, 多线程]
 toc: true
 description: 并发是Java开发领域中经常被提及的问题，也是比较复杂的问题。提到并发就不得不提到多线程和锁，可以认为JVM的线程模型和加锁机制是Java并发的基础。本文是多线程系列文章的提纲和汇总，我将由浅入深，从应用到原理将多线程相关的重要知识点进行阐述，并加以自己的理解。
-comments: false
+comments: true
 top: true
 ---
 

@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [并发, 多线程]
 toc: true
 description: 本文探究Java线程的底层实现，包括windows平台和Linux平台下的线程理论、原理和基本实现。
-comments: false
+comments: true
 ---
 
 ## 线程实现

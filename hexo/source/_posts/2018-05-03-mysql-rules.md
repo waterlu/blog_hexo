@@ -5,7 +5,7 @@ categories: 数据库
 tags: [Database, MySQL]
 toc: true
 description: MySQL使用注意事项，摘抄。
-comments: false
+comments: true
 ---
 
 58MySQL规范

@@ -5,7 +5,7 @@ categories: 数据库
 tags: [Database, MySQL, Sharding]
 toc: true
 description: 数据库水平拆分也叫做数据库分片或者数据库Sharding，当数据量增加到千万量级以上时，就需要考虑数据库分片了。根据切分数据类型的不同，可以分为1对1，1对多和多对多等很多种情况，越来越复杂。
-comments: false
+comments: true
 ---
 
 ## 数据库拆分

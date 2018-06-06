@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [并发, 线程]
 toc: true
 description: 本文介绍并发中最基本的概念-线程，包括如何创建、启动和终止一个线程，以及对线程一些基本属性的解释。
-comments: false
+comments: true
 ---
 
 ## 进程与线程

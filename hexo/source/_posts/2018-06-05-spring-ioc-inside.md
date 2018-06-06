@@ -5,7 +5,7 @@ categories: Spring
 tags: [Spring, IoC]
 toc: true
 description: 理解了Bean的生命周期就掌握了IoC的原理，源码分析是对Bean生命周期的代码化深入理解。
-comments: false
+comments: true
 ---
 
 ## IoC原理

@@ -5,7 +5,7 @@ categories: Spring
 tags: [Spring, IoC]
 toc: true
 description: 本文讨论IoC的进阶使用，包括：ApplicationContextAware、BeanPostProcessor、BeanFactoryPostProcessor、FactoryBean等深度定制的用法。
-comments: false
+comments: true
 ---
 
 ## IoC使用进阶

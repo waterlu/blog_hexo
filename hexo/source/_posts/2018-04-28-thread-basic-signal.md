@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [并发, 线程, synchronized, wait, notify]
 toc: true
 description: 我们已经了解如何创建一个线程，以及如何交给线程池去调度，接下来看看线程之间同步的问题。本文详细描述了如何使用synchronized和wait/notify实现线程同步。最后通过生产者-消费者的例子进行了深入讨论。
-comments: false
+comments: true
 ---
 
 ## 线程同步

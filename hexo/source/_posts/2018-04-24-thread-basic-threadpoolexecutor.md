@@ -6,7 +6,7 @@ categories: 并发编程
 tags: [并发, 线程, 线程池, 排队策略, 饱和策略]
 toc: true
 description: 理解了ThreadPoolExecutor类的各个参数和处理流程也就理解了线程池机制。核心线程数、最大线程数、排队策略和饱和策略是最重要的参数，其中排队策略决定了处理流程。通过测试代码可以很好的验证各种参数设置条件下线程池的处理策略。
-comments: false
+comments: true
 ---
 
 ## 原理

@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [ConcurrentHashMap]
 toc: true
 description: Java从1.5开始提供了并发工具包java.util.concurrent，极大简化了多线程编程的难度。本文将介绍常见的ConcurrentHashMap、BlockingQueue、AtomicInteger、ReentrantLock、CountDownLatch、Semaphore等常见类的用法。
-comments: false
+comments: true
 ---
 
 ## 并行包使用

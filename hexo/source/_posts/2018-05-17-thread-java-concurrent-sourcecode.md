@@ -5,7 +5,7 @@ categories: 并发编程
 tags: [Reentrantlock]
 toc: true
 description: Reentrantlock类源码和实现原理分析。
-comments: false
+comments: true
 
 ---
 

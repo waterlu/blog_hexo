@@ -5,7 +5,7 @@ categories: WEB
 tags: [WEB, 短地址, 哈希, hashCode]
 toc: true
 description: 短地址是实际业务中常见的需求，通过转换缩短URL链接地址的长度。小型业务中，我们通常使用免费的第三方服务来实现短地址转换。如果需要自己实现，该怎么做呢，本文给出方案和思考。此外，最后还引申了页面跳转和进制转换问题。
-comments: false
+comments: true
 ---
 
 ## 短地址

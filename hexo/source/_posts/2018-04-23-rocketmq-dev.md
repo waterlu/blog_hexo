@@ -6,7 +6,7 @@ categories: 消息队列
 tags: [mq, rocketmq]
 toc: true
 description: 了解RocketMQ的基本知识以后，我们来看一看如何编写发送消息和收取消息的代码。先展示如何直接调用rocketmq-client模块实现，再展示如何使用spring boot starter来实现。
-comments: false
+comments: true
 ---
 
 ### 编码
